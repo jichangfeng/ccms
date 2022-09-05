@@ -1,0 +1,99 @@
+table {
+    *border-collapse: collapse; /* IE7 and lower */
+    border-spacing: 0;
+    width: 100%;
+    font-family: '宋体';
+    font-size: 12px;
+    color: #444;
+}
+
+table {
+    background: #FFFFFF;
+    border-top: solid 1px #D3D3D3;
+    border-bottom: solid 1px #D3D3D3;
+    /*-moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;*/
+    /*-webkit-box-shadow: 0 1px 1px #ccc;
+    -moz-box-shadow: 0 1px 1px #ccc;
+    /*box-shadow: 0 1px 1px #ccc;*/
+}
+
+table tr:hover {
+    background: #fbf8e9;
+    -o-transition: all 0.1s ease-in-out;
+    -webkit-transition: all 0.1s ease-in-out;
+    -moz-transition: all 0.1s ease-in-out;
+    -ms-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+}
+
+table td, table th {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    padding: 6px;
+    text-align: center;
+}
+table td a {
+    color:#666666
+}
+
+table th {
+    background-color: #FEFCEF;
+    -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;
+    box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;
+    border-top: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+table th.actions {
+    min-width: 200px;
+}
+
+table td:first-child, table th:first-child {
+    border-left: none;
+}
+
+table th:first-child {
+    -moz-border-radius: 6px 0 0 0;
+    -webkit-border-radius: 6px 0 0 0;
+    border-radius: 6px 0 0 0;
+}
+
+table th:last-child {
+    -moz-border-radius: 0 6px 0 0;
+    -webkit-border-radius: 0 6px 0 0;
+    border-radius: 0 6px 0 0;
+}
+
+table th:only-child{
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+table tr:last-child td:first-child {
+    -moz-border-radius: 0 0 0 6px;
+    -webkit-border-radius: 0 0 0 6px;
+    border-radius: 0 0 0 6px;
+}
+
+table tr:last-child td:last-child {
+    -moz-border-radius: 0 0 6px 0;
+    -webkit-border-radius: 0 0 6px 0;
+    border-radius: 0 0 6px 0;
+}
+
+/******table_tree****/
+.table_tree .tr_hidden td{
+    border-top:0 none;
+}
+.span_ico{
+    background:url("../images/tree_t3.png") no-repeat center center;
+    display: inline-block;
+    padding: 2px 5px;
+    width: 16px;
+}
+.collapsed .span_ico{background:url("../images/tree_t2.png") no-repeat center center;cursor: pointer;}
+.expanded .span_ico{background:url("../images/tree_t1.png") no-repeat center center;cursor: pointer;}
+.table_tree .tr_hidden{display:none}

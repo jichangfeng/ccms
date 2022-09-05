@@ -1,0 +1,6 @@
+; $Id$
+name = Cms alipay
+description = Cms alipay
+core = 7.x
+version = "7.x"
+dependencies[] = minifield

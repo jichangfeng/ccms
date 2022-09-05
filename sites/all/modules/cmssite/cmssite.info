@@ -1,0 +1,6 @@
+; $Id$
+name = Cms site
+description = Cms site
+core = 7.x
+version = "7.x"
+dependencies[] = cms

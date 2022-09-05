@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<script src="../jquery/jquery-1.7.2.min.js"></script>
+	<script src="../swfobject/swfobject.js"></script>
+  </head>
+  <body>
+	<div class="banner">
+		<div id="content" style="width: 950px;margin: 0 auto;">
+			<div id="3d"></div>
+		</div>
+	</div>
+	<script>
+	$(function(){
+		var params ={wmode:'transparent',allowScriptAccess:'always',quality:'high',allowFullScreen:'true'};
+		swfobject.embedSWF("flash/portfolio.swf", "3d", "950", "380", "9.0.0", "expressInstall.swf", {}, params, {});
+	})
+</script>
+  </body>
+</html>

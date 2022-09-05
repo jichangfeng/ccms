@@ -1,0 +1,6 @@
+; $Id$
+name = Cms field
+description = Cms field
+core = 7.x
+version = "7.x"
+dependencies[] = cmsdata

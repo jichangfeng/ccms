@@ -1,0 +1,74 @@
+<?php
+/**
+ * Implementation of hook_schema().
+ * @author Changfeng Ji <jichf@qq.com>
+ */
+function cmsuser_schema() {
+  return array();
+}
+
+/**
+ * Implementation of hook_schema_alter().
+ */
+function cmsuser_schema_alter(&$schema){
+  // Add field to existing schema.
+  $schema['users']['fields']['mobile'] = array(
+    'type' => 'char',
+    'length' => 11,
+    'not null' => FALSE,
+    'default' => '',
+    'description' => "User's mobile phone number.",
+  );
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function cmsuser_install() {
+  if(!db_field_exists('users', 'mobile')){
+    db_add_field('users', 'mobile', array(
+      'type' => 'char',
+      'length' => 11,
+      'not null' => FALSE,
+      'default' => '',
+      'description' => "User's mobile phone number.",
+    ));
+  }
+  $admin_role_count = db_select('role', 'role')->fields('role', array('name'))->condition('name', 'administrator')->distinct()->execute()->rowCount();
+  if(!$admin_role_count){
+    // Create a default role for site administrators, with all available permissions assigned.
+    $admin_role = new stdClass();
+    $admin_role->name = 'administrator';
+    $admin_role->weight = 2;
+    user_role_save($admin_role);
+    user_role_grant_permissions($admin_role->rid, array_keys(module_invoke_all('permission')));
+    // Set this as the administrator role.
+    variable_set('user_admin_role', $admin_role->rid);
+    // Assign user 1 the "administrator" role.
+    db_insert('users_roles')
+      ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
+      ->execute();
+  }
+  CMSRole::ClearRoles();
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function cmsuser_uninstall() {
+
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function cmsuser_enable() {
+  CMSRole::ClearRoles();
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function cmsuser_disable() {
+
+}

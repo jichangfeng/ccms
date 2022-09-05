@@ -1,0 +1,7 @@
+; $Id$
+name = Cms
+description = Cms
+core = 7.x
+version = "7.x"
+dependencies[] = cmsdata
+dependencies[] = cmsuser

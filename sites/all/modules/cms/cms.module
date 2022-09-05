@@ -1,0 +1,106 @@
+<?php
+require_once 'cms.common.inc';
+define("CMS_MODULE_PATH", drupal_get_path("module", "cms"));
+
+function cms_menu(){
+  $items['cms'] = array(
+    'title' => 'cms entrance',
+    'description' => '',
+    'page callback' => 'cms_entrance',
+    'file' => 'inc/cms.entrance.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cms/front'] = array(
+    'title' => 'cms front',
+    'description' => '',
+    'page callback' => 'cms_front',
+    'file' => 'inc/cms.front.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms front'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cms_menu_alter(&$items){
+  $modules = array('user');
+  $paths = array();
+  foreach($modules as $module){
+    if(function_exists($module . '_menu')){
+      $router_items = call_user_func($module . '_menu');
+      $paths = array_merge($paths, array_keys($router_items));
+    }
+  }
+  foreach($paths as $path){
+    if(isset($items[$path]) && $path != 'user/logout' && substr($path, 0, 5) != 'admin'){
+      unset($items[$path]);
+    }
+  }
+}
+
+function cms_permission(){
+  $perms = array(
+    'cms front' => array('title' => t('CMS 首页'))
+  );
+  return $perms;
+}
+
+function cms_init(){
+  $modules = array('cms', 'cmsdata', 'cmsfield', 'cmsuser', 'cmsnode', 'cmsalipay');
+  $paths = MiniFieldCommon::MenuPaths($modules);
+  $router_item = menu_get_item(null);
+  if(!in_array($router_item['path'], $paths)){
+    return;
+  }
+  if($router_item['path'] == 'cms'){
+    cmsAddCss(CMS_MODULE_PATH . '/tpl/css/cmsLoginPage.css');
+  }else{
+    cmsAddCss(CMS_MODULE_PATH . '/tpl/css/cmsFramePage.css');
+    cmsAddCss(CMS_MODULE_PATH . '/tpl/css/form.css');
+    cmsAddCss(CMS_MODULE_PATH . '/tpl/css/table.css');
+    cmsAddCss(CMS_MODULE_PATH . '/tpl/css/dataList.css');
+    cmsAddJs('misc/resources/jquery/jquery.cookie.js');
+    cmsAddJs(CMS_MODULE_PATH . '/tpl/js/preprocess.js');
+    cmsAddJs(CMS_MODULE_PATH . '/tpl/js/cmsFramePage.js');
+  }
+}
+
+function cms_css_alter(&$css){
+  $modules = array('cms', 'cmsdata', 'cmsfield', 'cmsuser', 'cmsnode', 'cmsalipay');
+  $paths = MiniFieldCommon::MenuPaths($modules);
+  $router_item = menu_get_item(null);
+  if(!in_array($router_item['path'], $paths)){
+    return;
+  }
+  $newcss = array();
+  $keys = cmsAddCss();
+  foreach($keys as $key){
+    if(isset($css[$key])){
+      $newcss[$key] = $css[$key];
+    }
+  }
+  $css = $newcss;
+}
+
+function cms_js_alter(&$javascript) {
+  $modules = array('cms', 'cmsdata', 'cmsfield', 'cmsuser', 'cmsnode', 'cmsalipay');
+  $paths = MiniFieldCommon::MenuPaths($modules);
+  $router_item = menu_get_item(null);
+  if(!in_array($router_item['path'], $paths)){
+    return;
+  }
+  $newjs = array();
+  $keys = cmsAddJs();
+  foreach($keys as $key){
+    if(isset($javascript[$key])){
+      $newjs[$key] = $javascript[$key];
+    }
+  }
+  $javascript = $newjs;
+  if(isset($javascript['misc/jquery.js'])){
+    $javascript['misc/jquery.js']['data'] = 'misc/resources/jquery/jquery-1.7.2.js';
+    $javascript['misc/jquery.js']['version'] = '1.7.2';
+  }
+}

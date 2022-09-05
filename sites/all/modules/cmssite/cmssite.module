@@ -1,0 +1,126 @@
+<?php
+require_once 'cmssite.common.inc';
+define("CMSSITE_MODULE_PATH", drupal_get_path("module", "cmssite"));
+
+function cmssite_menu(){
+  $items['siteroot'] = array(
+    'title' => 'cms site root',
+    'description' => '',
+    'page callback' => 'cmssite_siteroot',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['sts'] = array(
+    'title' => 'cms site trees',
+    'description' => '',
+    'page callback' => 'cmssite_sts',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+
+  $items['ulogin'] = array(
+    'title' => 'cms user login',
+    'description' => '',
+    'page callback' => 'cmssite_ulogin',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['uregister'] = array(
+    'title' => 'cms user register',
+    'description' => '',
+    'page callback' => 'cmssite_uregister',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['uactivate'] = array(
+    'title' => 'cms user activate',
+    'description' => '',
+    'page callback' => 'cmssite_uactivate',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['uresetpass'] = array(
+    'title' => 'cms user resetpass',
+    'description' => '',
+    'page callback' => 'cmssite_uresetpass',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+
+  $items['site403'] = array(
+    'title' => 'cms site 403',
+    'description' => '',
+    'page callback' => 'cmssite_site403',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['site404'] = array(
+    'title' => 'cms site 404',
+    'description' => '',
+    'page callback' => 'cmssite_site404',
+    'file' => 'inc/cmssite.inc',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cmssite_permission(){
+  $perms = array();
+  return $perms;
+}
+
+function cmssite_init(){
+  $modules = array('cmssite');
+  $paths = MiniFieldCommon::MenuPaths($modules);
+  $router_item = menu_get_item(null);
+  if(!in_array($router_item['path'], $paths)){
+    return;
+  }
+  cmsAddJs(CMSSITE_MODULE_PATH . '/tpl/js/preprocess.js');
+}
+
+function cmssite_css_alter(&$css){
+  $modules = array('cmssite');
+  $paths = MiniFieldCommon::MenuPaths($modules);
+  $router_item = menu_get_item(null);
+  if(!in_array($router_item['path'], $paths)){
+    return;
+  }
+  $newcss = array();
+  $keys = cmsAddCss();
+  foreach($keys as $key){
+    if(isset($css[$key])){
+      $newcss[$key] = $css[$key];
+    }
+  }
+  $css = $newcss;
+}
+
+function cmssite_js_alter(&$javascript) {
+  $modules = array('cmssite');
+  $paths = MiniFieldCommon::MenuPaths($modules);
+  $router_item = menu_get_item(null);
+  if(!in_array($router_item['path'], $paths)){
+    return;
+  }
+  $newjs = array();
+  $keys = cmsAddJs();
+  foreach($keys as $key){
+    if(isset($javascript[$key])){
+      $newjs[$key] = $javascript[$key];
+    }
+  }
+  $javascript = $newjs;
+  if(isset($javascript['misc/jquery.js'])){
+    $javascript['misc/jquery.js']['data'] = 'misc/resources/jquery/jquery-1.7.2.js';
+    $javascript['misc/jquery.js']['version'] = '1.7.2';
+  }
+}

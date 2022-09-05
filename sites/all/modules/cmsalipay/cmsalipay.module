@@ -1,0 +1,28 @@
+<?php
+require_once 'cmsalipay.common.inc';
+define("CMSALIPAY_MODULE_PATH", drupal_get_path("module", "cmsalipay"));
+
+function cmsalipay_menu(){
+  $items['cmsalipay/notify'] = array(
+    'title' => 'Order complete notify',
+    'description' => '',
+    'page callback' => 'cmsalipay_notify',
+    'file' => 'inc/cmsalipay.notify.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsalipay/return'] = array(
+    'title' => 'Order complete return',
+    'description' => '',
+    'page callback' => 'cmsalipay_return',
+    'file' => 'inc/cmsalipay.return.inc',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cmsalipay_permission(){
+  $perms = array();
+  return $perms;
+}

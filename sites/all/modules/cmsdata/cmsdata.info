@@ -1,0 +1,7 @@
+; $Id$
+name = Cms data
+description = Cms data
+core = 7.x
+version = "7.x"
+dependencies[] = minifield
+dependencies[] = cms

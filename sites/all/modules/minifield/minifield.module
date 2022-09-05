@@ -1,0 +1,344 @@
+<?php
+require_once 'minifield.static.inc';
+require_once 'minifield.translation.inc';
+require_once 'minifield.repository.inc';
+require_once 'minifield.file.inc';
+require_once 'minifield.common.inc';
+require_once 'minifield.sql.inc';
+require_once 'minifield.data.inc';
+require_once 'minifield.category.inc';
+require_once 'minifield.field.inc';
+define("MINIFIELD_MODULE_PATH", drupal_get_path("module","minifield"));
+define("MINIFIELD_MENU_PATH", "admin/minifield");
+
+function minifield_menu(){
+  $items[MINIFIELD_MENU_PATH] = array(
+    'title' => 'Mini Field',
+    'description' => 'Mini of field',
+    'access arguments' => array('mini field'),
+    'type' => MENU_NORMAL_ITEM
+  );
+  
+  /* category */
+  $items[MINIFIELD_MENU_PATH.'/category'] = array(
+    'title' => 'Category',
+    'description' => 'Mini of field category',
+    'page callback' => 'minifield_category',
+    'page arguments' => array('list'),
+    'file' => 'inc/minifield.category.inc',
+    'access arguments' => array('mini field category view'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/category/list'] = array(
+    'title' => 'Category list',
+    'page callback' => 'minifield_category',
+    'page arguments' => array(3),
+    'file' => 'inc/minifield.category.inc',
+    'access arguments' => array('mini field category view'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/category/add'] = array(
+    'title' => 'Category add',
+    'page callback' => 'minifield_category',
+    'page arguments' => array(3),
+    'file' => 'inc/minifield.category.inc',
+    'access arguments' => array('mini field category add'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  $items[MINIFIELD_MENU_PATH.'/category/%'] = array(
+    'title' => 'Category operate',
+    'type' => MENU_CALLBACK
+  );
+  $items[MINIFIELD_MENU_PATH.'/category/%/edit'] = array(
+    'title' => 'Category edit',
+    'page callback' => 'minifield_category',
+    'page arguments' => array(4, 3),
+    'file' => 'inc/minifield.category.inc',
+    'access arguments' => array('mini field category edit'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/category/%/delete'] = array(
+    'title' => 'Category delete',
+    'page callback' => 'minifield_category',
+    'page arguments' => array(4, 3),
+    'file' => 'inc/minifield.category.inc',
+    'access arguments' => array('mini field category delete'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  
+  /* field */
+  $items[MINIFIELD_MENU_PATH.'/field'] = array(
+    'title' => 'Field',
+    'description' => 'Mini of field field',
+    'page callback' => 'minifield_field_structure',
+    'file' => 'inc/minifield.field.inc',
+    'access arguments' => array('mini field field view'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 2
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/structure'] = array(
+    'title' => 'Field structure',
+    'page callback' => 'minifield_field_structure',
+    'file' => 'inc/minifield.field.inc',
+    'access arguments' => array('mini field field view'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/%'] = array(
+    'title' => 'Field list',
+    'type' => MENU_CALLBACK
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/%/list'] = array(
+    'title' => 'Field list',
+    'page callback' => 'minifield_field',
+    'page arguments' => array(4, 3),
+    'file' => 'inc/minifield.field.inc',
+    'access arguments' => array('mini field field view'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/%/add'] = array(
+    'title' => 'Field add',
+    'page callback' => 'minifield_field',
+    'page arguments' => array(4, 3),
+    'file' => 'inc/minifield.field.inc',
+    'access arguments' => array('mini field field add'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/%/%'] = array(
+    'title' => 'Field operate',
+    'type' => MENU_CALLBACK
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/%/%/edit'] = array(
+    'title' => 'Field edit',
+    'page callback' => 'minifield_field',
+    'page arguments' => array(5, 3, 4),
+    'file' => 'inc/minifield.field.inc',
+    'access arguments' => array('mini field field edit'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/field/%/%/delete'] = array(
+    'title' => 'Field delete',
+    'page callback' => 'minifield_field',
+    'page arguments' => array(5, 3, 4),
+    'file' => 'inc/minifield.field.inc',
+    'access arguments' => array('mini field field delete'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  
+  /* data */
+  $items[MINIFIELD_MENU_PATH.'/data'] = array(
+    'title' => 'Data',
+    'description' => 'Mini of field data',
+    'page callback' => 'minifield_data_structure',
+    'file' => 'inc/minifield.data.inc',
+    'access arguments' => array('mini field data view'),
+    'type' => MENU_NORMAL_ITEM,
+    'weight' => 3
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/structure'] = array(
+    'title' => 'Data structure',
+    'page callback' => 'minifield_data_structure',
+    'file' => 'inc/minifield.data.inc',
+    'access arguments' => array('mini field data view'),
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/%'] = array(
+    'title' => 'Data administration',
+    'type' => MENU_CALLBACK
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/%/list'] = array(
+    'title' => 'Data list',
+    'page callback' => 'minifield_data',
+    'page arguments' => array(4, 3),
+    'file' => 'inc/minifield.data.inc',
+    'access arguments' => array('mini field data view'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/%/add'] = array(
+    'title' => 'Data add',
+    'page callback' => 'minifield_data',
+    'page arguments' => array(4, 3),
+    'file' => 'inc/minifield.data.inc',
+    'access arguments' => array('mini field data add'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/%/%'] = array(
+    'title' => 'Data operate',
+    'type' => MENU_CALLBACK
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/%/%/edit'] = array(
+    'title' => 'Data edit',
+    'page callback' => 'minifield_data',
+    'page arguments' => array(5, 3, 4),
+    'file' => 'inc/minifield.data.inc',
+    'access arguments' => array('mini field data edit'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 1
+  );
+  $items[MINIFIELD_MENU_PATH.'/data/%/%/delete'] = array(
+    'title' => 'Data delete',
+    'page callback' => 'minifield_data',
+    'page arguments' => array(5, 3, 4),
+    'file' => 'inc/minifield.data.inc',
+    'access arguments' => array('mini field data delete'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 2
+  );
+  
+  /* file */
+  $items[MINIFIELD_MENU_PATH.'/file/%/del'] = array(
+    'title' => 'File delete',
+    'page callback' => 'minifield_file_del',
+    'page arguments' => array(3),
+    'file' => 'inc/minifield.file.inc',
+    'access arguments' => array('mini field file delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items[MINIFIELD_MENU_PATH.'/file/%/download'] = array(
+    'title' => 'File download',
+    'page callback' => 'minifield_file_download',
+    'page arguments' => array(3),
+    'file' => 'inc/minifield.file.inc',
+    'access arguments' => array('mini field file download'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function minifield_permission(){
+  $perms = array(
+    'mini field' => array('title' => t('迷你字段 管理')),
+    /* category */
+    'mini field category view' => array('title' => t('迷你字段 类别查看')),
+    'mini field category add' => array('title' => t('迷你字段 类别添加')),
+    'mini field category edit' => array('title' => t('迷你字段 类别编辑')),
+    'mini field category delete' => array('title' => t('迷你字段 类别删除')),
+    /* field */
+    'mini field field view' => array('title' => t('迷你字段 字段查看')),
+    'mini field field add' => array('title' => t('迷你字段 字段添加')),
+    'mini field field edit' => array('title' => t('迷你字段 字段编辑')),
+    'mini field field delete' => array('title' => t('迷你字段 字段删除')),
+    /* data */
+    'mini field data view' => array('title' => t('迷你字段 数据查看')),
+    'mini field data add' => array('title' => t('迷你字段 数据添加')),
+    'mini field data edit' => array('title' => t('迷你字段 数据编辑')),
+    'mini field data delete' => array('title' => t('迷你字段 数据删除')),
+    /* file */
+    'mini field file delete' => array('title' => t('迷你字段 文件删除(AJAX)')),
+    'mini field file download' => array('title' => t('迷你字段 文件下载'))
+  );
+  return $perms;
+}
+
+function minifield_init(){
+  MiniFieldTranslation::AddTranslations(MiniFieldTranslation::Translations(true), true);
+}
+
+/**
+ * Load a table name of minifield category.
+ * @param int $cid The id of minifield category.
+ * @param boolean $reset to reset the internal cache and load from the database; FALSE (default) to load from the internal cache, if set.
+ * @return string The table name of minifield category, or empty string if not found.
+ */
+function minifield_tablename_load($cid, $reset = false){
+  $StaticName = __FUNCTION__;
+  $arrs = MiniFieldStatic::GetStatic($StaticName, true);
+  if($reset){
+    $arrs = MiniFieldStatic::ClearStatic($StaticName);
+  }
+  if(!isset($arrs)){
+    $Category = MiniFieldCategoryStructure::Category();
+    if(empty($Category->tablename)){ return ''; }
+    $arrs = MiniFieldSql::FilterDatasByTable($Category->tablename, array('id', 'tablename'), array(), array(), array(array('weight', 'ASC'), array('id', 'ASC')), null, 0, array('fetchAllKeyed'));
+    MiniFieldStatic::SetStatic($StaticName, $arrs, true);
+  }
+  return isset($arrs[$cid]) ? $arrs[$cid] : '';
+}
+/**
+ * Load a id of minifield category.
+ * @param string $tablename The table name of minifield category.
+ * @param boolean $reset to reset the internal cache and load from the database; FALSE (default) to load from the internal cache, if set.
+ * @return int The id of minifield category, or 0 if not found.
+ */
+function minifield_cid_load($tablename, $reset = false){
+  $StaticName = __FUNCTION__;
+  $arrs = MiniFieldStatic::GetStatic($StaticName, true);
+  if($reset){
+    $arrs = MiniFieldStatic::ClearStatic($StaticName);
+  }
+  if(!isset($arrs)){
+    $Category = MiniFieldCategoryStructure::Category();
+    if(empty($Category->tablename)){ return ''; }
+    $arrs = MiniFieldSql::FilterDatasByTable($Category->tablename, array('tablename', 'id'), array(), array(), array(array('weight', 'ASC'), array('id', 'ASC')), null, 0, array('fetchAllKeyed'));
+    MiniFieldStatic::SetStatic($StaticName, $arrs, true);
+  }
+  return isset($arrs[$tablename]) ? $arrs[$tablename] : 0;
+}
+
+/**
+ * Load a field name of minifield.
+ * @param int $cid The id of minifield category.
+ * @param int $id The id of minifield.
+ * @param boolean $reset to reset the internal cache and load from the database; FALSE (default) to load from the internal cache, if set.
+ * @return string The field name of minifield, or empty string if not found.
+ */
+function minifield_fieldname_load($cid, $id, $reset = false){
+  $StaticName = __FUNCTION__;
+  $arrs = MiniFieldStatic::GetStatic($StaticName, true);
+  if($reset){
+    $arrs = MiniFieldStatic::ClearStatic($StaticName);
+  }
+  if(!isset($arrs[$cid])){
+    if(!is_array($arrs)){
+      $arrs = array();
+    }
+    $Category = MiniFieldStructure::Category();
+    if(empty($Category->tablename)){ return ''; }
+    $arrs[$cid] = MiniFieldSql::FilterDatasByTable($Category->tablename, array('id', 'fieldname'), array(), array(array('cid', $cid)), array(array('weight', 'ASC'), array('id', 'ASC')), null, 0, array('fetchAllKeyed'));
+    MiniFieldStatic::SetStatic($StaticName, $arrs, true);
+  }
+  return isset($arrs[$cid][$id]) ? $arrs[$cid][$id] : '';
+}
+/**
+ * Load a id of minifield.
+ * @param int $cid The id of minifield category.
+ * @param string $fieldname The field name of minifield.
+ * @param boolean $reset to reset the internal cache and load from the database; FALSE (default) to load from the internal cache, if set.
+ * @return int The id of minifield, or 0 if not found.
+ */
+function minifield_id_load($cid, $fieldname, $reset = false){
+  $StaticName = __FUNCTION__;
+  $arrs = MiniFieldStatic::GetStatic($StaticName, true);
+  if($reset){
+    $arrs = MiniFieldStatic::ClearStatic($StaticName);
+  }
+  if(!isset($arrs[$cid])){
+    if(!is_array($arrs)){
+      $arrs = array();
+    }
+    $Category = MiniFieldStructure::Category();
+    if(empty($Category->tablename)){ return ''; }
+    $arrs[$cid] = MiniFieldSql::FilterDatasByTable($Category->tablename, array('fieldname', 'id'), array(), array(array('cid', $cid)), array(array('weight', 'ASC'), array('id', 'ASC')), null, 0, array('fetchAllKeyed'));
+    MiniFieldStatic::SetStatic($StaticName, $arrs, true);
+  }
+  return isset($arrs[$cid][$fieldname]) ? $arrs[$cid][$fieldname] : 0;
+}
+
+function minifield_file_delete($file){
+  MiniFieldStatic::ClearStatic('MiniFieldFile_loadFile_' . $file->fid);
+}
+function minifield_file_update($file){
+  MiniFieldStatic::ClearStatic('MiniFieldFile_loadFile_' . $file->fid);
+}

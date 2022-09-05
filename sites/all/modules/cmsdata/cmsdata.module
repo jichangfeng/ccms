@@ -1,0 +1,359 @@
+<?php
+/**
+ * 网站翻译-字段类别标识
+ */
+define('CMSDATA_CID_TRANSLATION', 1);
+/**
+ * 网站信息-字段类别标识
+ */
+define('CMSDATA_CID_SITEINFO', 2);
+/**
+ * 网站栏目-字段类别标识
+ */
+define('CMSDATA_CID_NAVIGATION', 3);
+require_once 'cmsdata.common.inc';
+require_once 'cmsdata.translation.inc';
+require_once 'cmsdata.siteinfo.inc';
+require_once 'cmsdata.navigation.inc';
+define("CMSDATA_MODULE_PATH", drupal_get_path("module", "cmsdata"));
+
+function cmsdata_menu(){
+  /* data */
+  $items['cmsdata/%'] = array(
+    'title' => 'cms data handle',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms data'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/%/list'] = array(
+    'title' => 'cms data list',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms data view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/%/add'] = array(
+    'title' => 'cms data add',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms data add'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/%/%/edit'] = array(
+    'title' => 'cms data edit',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms data edit'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/%/%/delete'] = array(
+    'title' => 'cms data delete',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms data delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/%/delete'] = array(
+    'title' => 'cms data batch delete',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms data batch delete'),
+    'type' => MENU_CALLBACK
+  );
+  /* navigation */
+  $items['cmsdata/'.CMSDATA_CID_NAVIGATION.'/list'] = array(
+    'title' => 'cms navigation list',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms navigation view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_NAVIGATION.'/add'] = array(
+    'title' => 'cms navigation add',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms navigation add'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_NAVIGATION.'/%/edit'] = array(
+    'title' => 'cms navigation edit',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms navigation edit'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_NAVIGATION.'/%/delete'] = array(
+    'title' => 'cms navigation delete',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms navigation delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_NAVIGATION.'/delete'] = array(
+    'title' => 'cms navigation batch delete',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms navigation batch delete'),
+    'type' => MENU_CALLBACK
+  );
+  $arrHtmls = array(
+    'GenerateIndexHtml', 'ClearIndexHtml',
+    'GenerateTplindexHtmlsAll', 'ClearTplindexHtmlsAll',
+    'GenerateTplindexHtmlsByNavtags', 'ClearTplindexHtmlsByNavtags',
+    'GenerateTplarticleHtmlsAll', 'ClearTplarticleHtmlsAll',
+    'GenerateTplarticleHtmlsAllByNavtags', 'ClearTplarticleHtmlsAllByNavtags',
+    'GenerateTplarticleHtmlsAllByNavtag', 'ClearTplarticleHtmlsAllByNavtag',
+    'GenerateTplarticleHtmlsByNavtagNodeides', 'ClearTplarticleHtmlsByNavtagNodeides'
+  );
+  foreach($arrHtmls as $Html){
+    $items['cmsdata/'.CMSDATA_CID_NAVIGATION.'/'.$Html] = array(
+      'title' => 'cms navigation '.$Html,
+      'description' => '',
+      'page callback' => 'cmsdata_handle',
+      'page arguments' => array(1),
+      'file' => 'inc/cmsdata.inc',
+      'delivery callback' => 'cmsframe',
+      'access arguments' => array('cms navigation '.$Html),
+      'type' => MENU_CALLBACK
+    );
+  }
+  /* translation */
+  $items['cmsdata/'.CMSDATA_CID_TRANSLATION.'/list'] = array(
+    'title' => 'cms translation list',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms translation view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_TRANSLATION.'/add'] = array(
+    'title' => 'cms translation add',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms translation add'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_TRANSLATION.'/%/edit'] = array(
+    'title' => 'cms translation edit',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms translation edit'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_TRANSLATION.'/%/delete'] = array(
+    'title' => 'cms translation delete',
+    'description' => '',
+    'page callback' => 'cmsdata',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms translation delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_TRANSLATION.'/delete'] = array(
+    'title' => 'cms translation batch delete',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms translation batch delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/'.CMSDATA_CID_TRANSLATION.'/fixed'] = array(
+    'title' => 'cms translation fixed',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms translation fixed'),
+    'type' => MENU_CALLBACK
+  );
+  /* file */
+  $items['cmsdata/file/delete'] = array(
+    'title' => 'cms file delete',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms file delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/file/download'] = array(
+    'title' => 'cms file download',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms file download'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/file/securitypic'] = array(
+    'title' => 'cms file security picture',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms file securitypic'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/file/securimage'] = array(
+    'title' => 'cms file security image',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms file securimage'),
+    'type' => MENU_CALLBACK
+  );
+  /* other */
+  $items['cmsdata/%/menurebuild'] = array(
+    'title' => 'cms menurebuild',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms menurebuild'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsdata/%/clearcache'] = array(
+    'title' => 'cms clearcache',
+    'description' => '',
+    'page callback' => 'cmsdata_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsdata.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms clearcache'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cmsdata_permission(){
+  $perms = array(
+    /* data */
+    'cms data' => array('title' => t('CMS数据 管理')),
+    'cms data view' => array('title' => t('CMS数据 查看')),
+    'cms data add' => array('title' => t('CMS数据 添加')),
+    'cms data edit' => array('title' => t('CMS数据 编辑')),
+    'cms data delete' => array('title' => t('CMS数据 删除')),
+    'cms data batch delete' => array('title' => t('CMS数据 批量删除(AJAX)')),
+    /* navigation */
+    'cms navigation view' => array('title' => t('CMS栏目 查看')),
+    'cms navigation add' => array('title' => t('CMS栏目 添加')),
+    'cms navigation edit' => array('title' => t('CMS栏目 编辑')),
+    'cms navigation delete' => array('title' => t('CMS栏目 删除')),
+    'cms navigation batch delete' => array('title' => t('CMS栏目 批量删除(AJAX)')),
+    'cms navigation GenerateIndexHtml' => array('title' => t('CMS栏目 生成首页HTML(AJAX)')),
+    'cms navigation ClearIndexHtml' => array('title' => t('CMS栏目 清理首页HTML(AJAX)')),
+    'cms navigation GenerateTplindexHtmlsAll' => array('title' => t('CMS栏目 生成所有栏目的栏目模板HTML(AJAX)')),
+    'cms navigation ClearTplindexHtmlsAll' => array('title' => t('CMS栏目 清理所有栏目的栏目模板HTML(AJAX)')),
+    'cms navigation GenerateTplindexHtmlsByNavtags' => array('title' => t('CMS栏目 生成部分栏目的栏目模板HTML(AJAX)')),
+    'cms navigation ClearTplindexHtmlsByNavtags' => array('title' => t('CMS栏目 清理部分栏目的栏目模板HTML(AJAX)')),
+    'cms navigation GenerateTplarticleHtmlsAll' => array('title' => t('CMS栏目 生成所有栏目的所有内容模板HTML(AJAX)')),
+    'cms navigation ClearTplarticleHtmlsAll' => array('title' => t('CMS栏目 清理所有栏目的所有内容模板HTML(AJAX)')),
+    'cms navigation GenerateTplarticleHtmlsAllByNavtags' => array('title' => t('CMS栏目 生成部分栏目的所有内容模板HTML(AJAX)')),
+    'cms navigation ClearTplarticleHtmlsAllByNavtags' => array('title' => t('CMS栏目 清理部分栏目的所有内容模板HTML(AJAX)')),
+    'cms navigation GenerateTplarticleHtmlsAllByNavtag' => array('title' => t('CMS栏目 生成单个栏目的所有内容模板HTML(AJAX)')),
+    'cms navigation ClearTplarticleHtmlsAllByNavtag' => array('title' => t('CMS栏目 清理单个栏目的所有内容模板HTML(AJAX)')),
+    'cms navigation GenerateTplarticleHtmlsByNavtagNodeides' => array('title' => t('CMS栏目 生成单个栏目的部分内容模板HTML(AJAX)')),
+    'cms navigation ClearTplarticleHtmlsByNavtagNodeides' => array('title' => t('CMS栏目 清理单个栏目的部分内容模板HTML(AJAX)')),
+    /* translation */
+    'cms translation view' => array('title' => t('CMS翻译 查看')),
+    'cms translation add' => array('title' => t('CMS翻译 添加')),
+    'cms translation edit' => array('title' => t('CMS翻译 编辑')),
+    'cms translation delete' => array('title' => t('CMS翻译 删除')),
+    'cms translation batch delete' => array('title' => t('CMS翻译 批量删除(AJAX)')),
+    'cms translation fixed' => array('title' => t('CMS翻译 固定翻译')),
+    /* file */
+    'cms file delete' => array('title' => t('CMS文件 删除(AJAX)')),
+    'cms file download' => array('title' => t('CMS文件 下载')),
+    'cms file securitypic' => array('title' => t('CMS文件 简单验证码')),
+    'cms file securimage' => array('title' => t('CMS文件 高级验证码')),
+    /* other */
+    'cms menurebuild' => array('title' => t('CMS其它 菜单重建(AJAX)')),
+    'cms clearcache' => array('title' => t('CMS其它 清理缓存(AJAX)'))
+  );
+  return $perms;
+}
+
+function cmsdata_init(){
+  drupal_add_js(array('baseUrl' => $GLOBALS['base_url']), 'setting');//javascript:Drupal.settings.baseUrl;(after echo drupal_get_js())
+  drupal_add_js(array('siteinfo' => CMSSiteInfo::Info()), 'setting');//javascript:Drupal.settings.siteinfo;(after echo drupal_get_js())
+  //////////////////////////////////////////////////////
+  MiniFieldTranslation::AddTranslations(CMSTranslation::Translations(), false);
+  $lang = MiniFieldTranslation::$Languages['zhs'];
+  if(isset($_COOKIE['clang']) && in_array($_COOKIE['clang'], MiniFieldTranslation::$Languages)){
+    $lang = $_COOKIE['clang'];
+  }else{
+    $_COOKIE['clang'] = $lang;
+  }
+  MiniFieldTranslation::SetLanguage($lang);
+}
+
+function cmsdata_minifielddata_save_1(){
+  MiniFieldStatic::ClearStatics('CMSTranslation');
+}
+function hook_minifielddata_delete_1(){
+  MiniFieldStatic::ClearStatics('CMSTranslation');
+}
+function cmsdata_minifielddata_save_2(){
+  MiniFieldStatic::ClearStatics('CMSSiteInfo');
+}
+function hook_minifielddata_delete_2(){
+  MiniFieldStatic::ClearStatics('CMSSiteInfo');
+}
+function cmsdata_minifielddata_save_3(){
+  MiniFieldStatic::ClearStatics('CMSNavigation');
+}
+function cmsdata_minifielddata_delete_3(){
+  MiniFieldStatic::ClearStatics('CMSNavigation');
+}

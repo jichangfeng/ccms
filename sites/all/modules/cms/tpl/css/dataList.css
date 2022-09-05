@@ -1,0 +1,58 @@
+.cdata {
+  width: 100%;
+  margin: 0 auto;
+}
+.btnLink {
+  padding: 4px 10px;
+  margin-bottom: 4px;
+  line-height: 2em;
+  text-align: center;
+  border-top: 1px solid #D3D3D3;
+  border-bottom: 1px solid #D3D3D3;
+  background-color: #fafafa;
+}
+.btnLink a{vertical-align: middle;}
+.searchArea {
+  padding: 4px 10px;
+  margin-bottom: 4px;
+  text-align: center;
+  border-top: 1px solid #D3D3D3;
+  border-bottom: 1px solid #D3D3D3;
+  background-color: #F9FCEF;
+}
+.searchArea form{
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+  font-size: 12px;
+}
+.tabTitle {
+  height: 30px;
+  line-height: 30px;
+  background: #fbfbfb;
+  border-top: 1px solid #D3D3D3;
+}
+.tabTitle .left {
+  float: left;
+  color: #666600;
+  font-weight: bold;
+  padding-left: 10px;
+}
+.tabTitle .right {
+  float: right;
+  padding-right: 10px;
+}
+.chooseData {
+  padding: 4px 10px;
+  line-height: 2em;
+  border-bottom: 1px solid #D3D3D3;
+  background: #FAFAFA;
+}
+.chooseData a{vertical-align: middle;}
+.pagerinfo {
+  height: 35px;
+  line-height: 35px;
+  border-bottom: 1px solid #D3D3D3;
+  background: #F9FCEF;
+  text-align: center;
+}

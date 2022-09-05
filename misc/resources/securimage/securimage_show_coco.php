@@ -1,0 +1,26 @@
+<?php
+require_once dirname(__FILE__) . '/securimage.php';
+$img = new Securimage();
+$img->session_name = 'securitycode';
+$img->image_signature = 'by coco   ';
+$img->signature_color = new Securimage_Color("#C0C0C0");
+$img->image_height = 30;
+$img->image_width = (int)($img->image_height * 2.875);
+$img->code_length = 4;//7;
+$img->case_sensitive = false;
+$img->perturbation = 0;//0.25;
+//$img->image_type = Securimage::SI_IMAGE_PNG;
+$img->captcha_type = Securimage::SI_CAPTCHA_STRING;
+//$img->image_bg_color = new Securimage_Color("#ffffff");
+$img->text_color = new Securimage_Color("#ff0000");
+$img->line_color = new Securimage_Color("#00ff00");
+$img->num_lines = 0;
+//$img->noise_color = new Securimage_Color("#707070");
+//$img->noise_level = 0;
+//$img->text_transparency_percentage = 50;
+//$img->use_transparent_text = true;
+//$img->charset = 'ABCDEFGHKLMNPRSTUVWYZabcdefghklmnprstuvwyz23456789';
+//$img->expiry_time = 900;
+//$img->use_wordlist = false;
+//$img->wordlist_file = "";
+$img->show('backgrounds/bg3.jpg'); // alternate use:  $img->show('/path/to/background_image.jpg');

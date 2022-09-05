@@ -1,0 +1,154 @@
+<?php
+require_once 'cmsnode.common.inc';
+require_once 'cmsnode.node.inc';
+define("CMSNODE_MODULE_PATH", drupal_get_path("module", "cmsnode"));
+
+function cmsnode_menu(){
+  $items['cmsnode'] = array(
+    'title' => 'cms node manage',
+    'description' => '',
+    'page callback' => 'cmsnode_structure',
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms node'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%'] = array(
+    'title' => 'cms node handle',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms node'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/list'] = array(
+    'title' => 'cms node list',
+    'description' => '',
+    'page callback' => 'cmsnode',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/add'] = array(
+    'title' => 'cms node add',
+    'description' => '',
+    'page callback' => 'cmsnode',
+    'page arguments' => array(2, 1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/%/edit'] = array(
+    'title' => 'cms node edit',
+    'description' => '',
+    'page callback' => 'cmsnode',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/%/delete'] = array(
+    'title' => 'cms node delete',
+    'description' => '',
+    'page callback' => 'cmsnode',
+    'page arguments' => array(3, 1, 2),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/delete'] = array(
+    'title' => 'cms node batch delete',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/mark'] = array(
+    'title' => 'cms node batch mark',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/move'] = array(
+    'title' => 'cms node batch move',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/deliveradd'] = array(
+    'title' => 'cms node deliver add',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 'cmsnode_menu_access_deliver',
+    'access arguments' => array('add', 1),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/deliveredit/%'] = array(
+    'title' => 'cms node deliver edit',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 'cmsnode_menu_access_deliver',
+    'access arguments' => array('edit', 1, 3),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsnode/%/deliverdel/%'] = array(
+    'title' => 'cms node deliver delete',
+    'description' => '',
+    'page callback' => 'cmsnode_handle',
+    'page arguments' => array(1),
+    'file' => 'inc/cmsnode.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 'cmsnode_menu_access_deliver',
+    'access arguments' => array('del', 1, 3),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cmsnode_permission(){
+  $perms = array(
+    'cms node' => array('title' => t('CMS栏目数据 管理'))
+  );
+  return $perms;
+}
+
+function cmsnode_menu_access_deliver($type, $navtag, $id = 0){
+  $Navigation = CMSNavigation::LoadNavigationByTag($navtag, false);
+  if(strpos($Navigation->deliver, $type) !== false){
+    if(function_exists('cmsnode_menu_access_deliver_' . $type . '_' . $Navigation->id)){
+      $args = array();
+      if(is_numeric($id) && $id > 0){
+        array_push($args, $id);
+      }
+      return call_user_func_array('cmsnode_menu_access_deliver_' . $type . '_' . $Navigation->id, $args);
+    }
+    if($GLOBALS['user']->uid > 0){
+      return true;
+    }
+  }
+  return false;
+}

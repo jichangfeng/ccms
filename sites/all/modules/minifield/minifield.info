@@ -1,0 +1,5 @@
+; $Id$
+name = Mini Field
+description = Mini of field
+core = 7.x
+version = "7.x"

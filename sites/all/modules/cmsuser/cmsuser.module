@@ -1,0 +1,346 @@
+<?php
+/**
+ * 网站角色-字段类别标识
+ */
+define('CMSUSER_CID_ROLE', 4);
+define('CMSUSER_CID_MESSAGE', 5);
+define('CMSUSER_CID_RELATIONSHIP', 6);
+require_once 'cmsuser.common.inc';
+require_once 'cmsuser.role.inc';
+require_once 'cmsuser.user.inc';
+require_once 'cmsuser.message.inc';
+require_once 'cmsuser.relationship.inc';
+define("CMSUSER_MODULE_PATH",drupal_get_path("module","cmsuser"));
+
+function cmsuser_menu(){
+  $items['cmsuser/usermaterial'] = array(
+    'title' => 'cms usermaterial',
+    'page callback' => 'cmsuser_usermaterial',
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms usermaterial'),
+    'type' => MENU_CALLBACK
+  );
+  /* role */
+  $items['cmsuser/role/%'] = array(
+    'title' => 'cms role handle',
+    'description' => '',
+    'page callback' => 'cmsuser_role_handle',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/list'] = array(
+    'title' => 'cms role list',
+    'page callback' => 'cmsuser_role',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/add'] = array(
+    'title' => 'cms role add',
+    'page callback' => 'cmsuser_role',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role add'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/%/edit'] = array(
+    'title' => 'cms role edit',
+    'page callback' => 'cmsuser_role',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role edit'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/%/del'] = array(
+    'title' => 'cms role delete',
+    'page callback' => 'cmsuser_role',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/delete'] = array(
+    'title' => 'cms role batch delete',
+    'description' => '',
+    'page callback' => 'cmsuser_role_handle',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role batch delete'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/clear'] = array(
+    'title' => 'cms role clear',
+    'description' => '',
+    'page callback' => 'cmsuser_role_handle',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role clear'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/role/permissions'] = array(
+    'title' => 'cms role permissions',
+    'description' => '',
+    'page callback' => 'cmsuser_role_handle',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.role.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms role permissions'),
+    'type' => MENU_CALLBACK
+  );
+  /* user */
+  $items['cmsuser/user'] = array(
+    'title' => 'cms user structure',
+    'page callback' => 'cmsuser_user_structure',
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/%'] = array(
+    'title' => 'cms user handle',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/list'] = array(
+    'title' => 'cms user list',
+    'page callback' => 'cmsuser_user',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/add'] = array(
+    'title' => 'cms user add',
+    'page callback' => 'cmsuser_user',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/%/edit'] = array(
+    'title' => 'cms user edit',
+    'page callback' => 'cmsuser_user',
+    'page arguments' => array(4, 2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/%/del'] = array(
+    'title' => 'cms user delete',
+    'page callback' => 'cmsuser_user',
+    'page arguments' => array(4, 2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/delete'] = array(
+    'title' => 'cms user batch delete',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access callback' => 1,
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/clear'] = array(
+    'title' => 'cms user clear',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user clear'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/getinfo'] = array(
+    'title' => 'cms user getinfo',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user getinfo'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/logout'] = array(
+    'title' => 'cms user login',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user logout'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/login'] = array(
+    'title' => 'cms user login',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user login'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/register'] = array(
+    'title' => 'cms user register',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user register'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/activate'] = array(
+    'title' => 'cms user activate',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user activate'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/user/%/resetpass'] = array(
+    'title' => 'cms user resetpass',
+    'description' => '',
+    'page callback' => 'cmsuser_user_handle',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsuser.user.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user resetpass'),
+    'type' => MENU_CALLBACK
+  );
+
+  $items['cmsuser/message/send'] = array(
+    'title' => 'cms user message of send message',
+    'description' => '',
+    'page callback' => 'cmsuser_message_send',
+    'page arguments' => array(),
+    'file' => 'inc/cmsuser.message.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user message send'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/message/%/senderstatus'] = array(
+    'title' => 'cms user message of change sender status by sender',
+    'description' => '',
+    'page callback' => 'cmsuser_message_senderstatus',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.message.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user message sender status'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsuser/message/%/receiverstatus'] = array(
+    'title' => 'cms user message of change receiver status by receiver',
+    'description' => '',
+    'page callback' => 'cmsuser_message_receiverstatus',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsuser.message.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user message receiver status'),
+    'type' => MENU_CALLBACK
+  );
+  
+  $items['cmsuser/relationship'] = array(
+    'title' => 'cms user relationship',
+    'description' => '',
+    'page callback' => 'cmsuser_relationship',
+    'page arguments' => array(),
+    'file' => 'inc/cmsuser.relationship.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms user relationship'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cmsuser_permission(){
+  $perms = array(
+    'cms usermaterial' => array('title' => t('CMS会员 用户资料')),
+    /* role */
+    'cms role' => array('title' => t('CMS角色 管理')),
+    'cms role view' => array('title' => t('CMS角色 查看')),
+    'cms role add' => array('title' => t('CMS角色 添加')),
+    'cms role edit' => array('title' => t('CMS角色 编辑')),
+    'cms role delete' => array('title' => t('CMS角色 删除')),
+    'cms role batch delete' => array('title' => t('CMS角色 批量删除(AJAX)')),
+    'cms role clear' => array('title' => t('CMS角色 清理')),
+    'cms role permissions' => array('title' => t('CMS角色 权限')),
+    /* user */
+    'cms user' => array('title' => t('CMS用户 管理')),
+    'cms user clear' => array('title' => t('CMS用户 清理')),
+    'cms user getinfo' => array('title' => t('CMS用户 获取账户信息[uid, name, mail, mobile, status, ...](AJAX)')),
+    'cms user logout' => array('title' => t('CMS用户 退出账户(AJAX)')),
+    'cms user login' => array('title' => t('CMS用户 登录账户(AJAX)')),
+    'cms user register' => array('title' => t('CMS用户 注册账户(AJAX)')),
+    'cms user activate' => array('title' => t('CMS用户 激活账户(AJAX)')),
+    'cms user resetpass' => array('title' => t('CMS用户 重置密码(AJAX)')),
+    /* message */
+    'cms user message send' => array('title' => t('CMS用户 发送消息(AJAX)')),
+    'cms user message sender status' => array('title' => t('CMS用户 设置消息发送人状态(AJAX)')),
+    'cms user message receiver status' => array('title' => t('CMS用户 设置消息接收人状态(AJAX)')),
+    /* relationship */
+    'cms user relationship' => array('title' => t('CMS用户 用户关系处理，包括 apply unapply accept refuse delete(AJAX)'))
+  );
+  return $perms;
+}
+
+function cmsuser_init(){
+  global $user;
+  drupal_add_js(array('user' => (object)array(
+    'uid' => $user->uid,
+    'name' => isset($user->name) ? $user->name : '',
+    'mail' => isset($user->mail) ? preg_replace('/(?<=.).(?=.*@)/u', '*', $user->mail) : '',
+    'status' => isset($user->status) ? $user->status : 0,
+  )), 'setting');//javascript:Drupal.settings.user;(after echo drupal_get_js())
+}
+
+function cmsuser_user_role_delete($role){
+  MiniFieldStatic::ClearStatics('CMSRole');
+}
+function cmsuser_user_role_insert($role){
+  MiniFieldStatic::ClearStatics('CMSRole');
+}
+function cmsuser_user_role_update($role){
+  MiniFieldStatic::ClearStatics('CMSRole');
+}
+
+function cmsuser_user_delete($account){
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUsersByRid');
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUserByUid_' . $account->uid);
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUserByRidUid_' . $account->uid);
+}
+function cmsuser_user_insert(&$edit, $account, $category){
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUsersByRid');
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUserByUid_' . $account->uid);
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUserByRidUid_' . $account->uid);
+}
+function cmsuser_user_update(&$edit, $account, $category){
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUsersByRid');
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUserByUid_' . $account->uid);
+  MiniFieldStatic::ClearStatics('CMSUser_LoadUserByRidUid_' . $account->uid);
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Demo</title>
+		<meta name=keywords content="">
+		<meta name="description" content="">
+		<meta charset="UTF-8">
+		<script src="jquery-1.7.2.min.js"></script>
+		<script src="jquery.tags-cloud-demo.js"></script>
+		<script type="text/javascript">
+		  $(function(){
+			if(typeof demopage=='undefined') demopage=1;
+			//START cloud			
+			$('#mycloud').cloud({
+			  //all settings are optional, you can delete them or provide your values
+			  hwratio				: 1,		//height/width ratio
+			  enable				: true,		//enable effect on mouse move
+			  draggable			: true,		//enable mouse drag
+			  gravitydriven		: false,		//enable effect on mobile device movement
+			  template			: (demopage==2)?4:1,		//number of template (0-10) or function
+			  maxspeed			: 4,		//maximum rotation speed
+			  attenuation			: 0.01,		//attenuation
+			  perspective			: 0.4,		//perspective koefficient
+			  sensitivityx		: (demopage==2)?0.2:0.08,		//if sensitivity=0 no effect will be applied
+			  sensitivityy		: (demopage==2)?0.2:0.08,		//negative values invert mouse			
+			  fadein				: 400,		//fadein on start (in ms)
+			  fog					: (demopage==1)?0.7:0.4,		//fog index
+			  zsort				: true,		//sort by z
+			  fps					: 60,		//default fps limit
+			  fpsmobile			: 30,		//default fps limit on mobile devices
+			  scale				: 0.8,		//scale template
+			  imgscale			: 0,		//scale images (works only if they are direct children of cloud)
+			  onclick             : function(v){ alert(v); }	//function to execute on tag click
+			});
+		  });
+		</script>
+		<style type="text/css">
+		  #mycloud{
+			width: 250px;
+			margin: 10px auto 0;
+			border: solid 1px black;
+			padding: 10px;
+		  }
+		  #mycloud img{padding:3px;border:1px solid #777;}
+		  #mycloud img{cursor: pointer;background-color:#fff;}		
+		  #mycloud img:hover{border:2px solid #222;margin:-1px;}
+		</style>
+  </head>
+  <body>
+    <div id="mycloud">
+      <img src="images/1.jpg" data-onclick="1">
+      <img src="images/2.jpg" data-onclick="2">
+      <img src="images/3.jpg" data-onclick="3">
+      <img src="images/4.jpg" data-onclick="4">
+      <img src="images/5.jpg" data-onclick="5">
+      <img src="images/6.jpg" data-onclick="6">
+      <img src="images/7.jpg" data-onclick="7">
+      <img src="images/8.jpg" data-onclick="8">
+      <img src="images/9.jpg" data-onclick="9">
+      <img src="images/10.jpg" data-onclick="10">
+      <img src="images/11.jpg" data-onclick="11">
+      <img src="images/12.jpg" data-onclick="12">
+      <img src="images/13.jpg" data-onclick="13">
+      <img src="images/14.jpg" data-onclick="14">
+      <img src="images/15.jpg" data-onclick="15">
+      <img src="images/16.jpg" data-onclick="16">
+      <img src="images/17.jpg" data-onclick="17">
+      <img src="images/18.jpg" data-onclick="18">
+      <img src="images/19.jpg" data-onclick="19">
+      <img src="images/20.jpg" data-onclick="20">
+      <img src="images/21.jpg" data-onclick="21">
+      <img src="images/22.jpg" data-onclick="22">
+      <img src="images/23.jpg" data-onclick="23">
+      <img src="images/24.jpg" data-onclick="24">
+      <img src="images/25.jpg" data-onclick="25">
+      <img src="images/26.jpg" data-onclick="26">
+      <img src="images/27.jpg" data-onclick="27">
+      <img src="images/28.jpg" data-onclick="28">
+      <img src="images/29.jpg" data-onclick="29">
+      <img src="images/30.jpg" data-onclick="30">
+    </div>
+  </body>
+</html>

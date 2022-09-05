@@ -1,0 +1,216 @@
+<?php
+/**
+ * Implementation of hook_schema().
+ * @author Changfeng Ji <jichf@qq.com>
+ */
+function minifield_schema() {
+  $schema['minifieldcategory'] = array(
+    'description' => t('字段类别表'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('自增唯一标识'),
+        'type' => 'serial',
+        'length' => 11,
+        'not null' => TRUE),
+      'name' => array(
+        'description' => t('显示名称'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE),
+      'tablename' => array(
+        'description' => t('唯一表名称'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE),
+      'grouptag' => array(
+        'description' => t('分组标记'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => FALSE),
+      'weight' => array(
+        'description' => t('权重'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'table_type' => array(
+        'description' => t('表存储引擎'),
+        'type' => 'varchar',
+        'length' => 50),
+      'table_collation' => array(
+        'description' => t('表整理'),
+        'type' => 'varchar',
+        'length' => 50),
+      'table_description' => array(
+        'description' => t('表描述'),
+        'type' => 'text',
+        'not null' => FALSE)
+    ),
+    'primary key' => array('id')
+  );
+  $schema['minifield'] = array(
+    'description' => t('字段表'),
+    'fields' => array(
+      'id' => array(
+        'description' => t('自增唯一标识'),
+        'type' => 'serial',
+        'length' => 11,
+        'not null' => TRUE),
+      'cid' => array(
+        'description' => t('所属字段类别标识'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'name' => array(
+        'description' => t('显示名称'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE),
+      'fieldname' => array(
+        'description' => t('唯一字段名称'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE),
+      'editor' => array(
+        'description' => t('编辑控件类型'),
+        'type' => 'varchar',
+        'length' => 50,
+        'not null' => TRUE),
+      'enabled' => array(
+        'description' => t('是否启用'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'required' => array(
+        'description' => t('是否必须'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'spotlight' => array(
+        'description' => t('是否醒目'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'weight' => array(
+        'description' => t('权重'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'field_type' => array(
+        'description' => t('字段类型'),
+        'type' => 'varchar',
+        'length' => 50),
+      'field_size' => array(
+        'description' => t('字段大小'),
+        'type' => 'varchar',
+        'length' => 50),
+      'field_notnull' => array(
+        'description' => t('字段不为空'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'field_default' => array(
+        'description' => t('字段默认值'),
+        'type' => 'varchar',
+        'length' => 50),
+      'field_length' => array(
+        'description' => t('字段长度'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 50),
+      'field_unsigned' => array(
+        'description' => t('字段无符号'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'field_description' => array(
+        'description' => t('字段描述'),
+        'type' => 'text',
+        'not null' => FALSE),
+      'editor_shown' => array(
+        'description' => t('编辑控件显示状态'),
+        'type' => 'int',
+        'length' => 11,
+        'not null' => TRUE,
+        'default' => 0),
+      'editor_style' => array(
+        'description' => t('编辑控件样式'),
+        'type' => 'varchar',
+        'length' => 255),
+      'editor_help' => array(
+        'description' => t('编辑控件帮助'),
+        'type' => 'varchar',
+        'length' => 255),
+      'editor_values_way' => array(
+        'description' => t('编辑控件可选值录入方式'),
+        'type' => 'varchar',
+        'length' => 50),
+      'editor_values_separator' => array(
+        'description' => t('编辑控件可选值分隔符'),
+        'type' => 'varchar',
+        'length' => 50),
+      'editor_values_group' => array(
+        'description' => t('编辑控件可选值分组标记'),
+        'type' => 'varchar',
+        'length' => 50),
+      'editor_values' => array(
+        'description' => t('编辑控件可选值'),
+        'type' => 'text',
+        'not null' => FALSE),
+      'editor_validate' => array(
+        'description' => t('编辑控件验证'),
+        'type' => 'varchar',
+        'length' => 255),
+      'editor_filevalidate' => array(
+        'description' => t('编辑控件文件验证'),
+        'type' => 'text',
+        'not null' => FALSE),
+      'editor_regexp' => array(
+        'description' => t('编辑控件正则表达式匹配'),
+        'type' => 'varchar',
+        'length' => 255),
+      'editor_regexp_error' => array(
+        'description' => t('编辑控件正则表达式匹配失败提醒语句'),
+        'type' => 'varchar',
+        'length' => 255)
+    ),
+    'primary key' => array('id')
+  );
+  return $schema;
+}
+
+/**
+ * Implementation of hook_install().
+ */
+function minifield_install() {
+  //drupal_install_schema('minifield');
+}
+
+/**
+ * Implementation of hook_uninstall().
+ */
+function minifield_uninstall() {
+  //drupal_uninstall_schema('minifield');
+}
+
+/**
+ * Implementation of hook_enable().
+ */
+function minifield_enable() {
+
+}
+
+/**
+ * Implementation of hook_disable().
+ */
+function minifield_disable() {
+
+}

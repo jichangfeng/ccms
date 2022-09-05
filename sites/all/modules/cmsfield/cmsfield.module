@@ -1,0 +1,168 @@
+<?php
+define("CMSFIELD_MODULE_PATH",drupal_get_path("module","cmsfield"));
+
+function cmsfield_menu(){
+  /* category */
+  $items['cmsfield/category/list'] = array(
+    'title' => 'Category list',
+    'page callback' => 'cmsfield_category',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsfield.category.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field category view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/category/add'] = array(
+    'title' => 'Category add',
+    'page callback' => 'cmsfield_category',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsfield.category.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field category add'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/category/%/edit'] = array(
+    'title' => 'Category edit',
+    'page callback' => 'cmsfield_category',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsfield.category.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field category edit'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/category/%/delete'] = array(
+    'title' => 'Category delete',
+    'page callback' => 'cmsfield_category',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsfield.category.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field category delete'),
+    'type' => MENU_CALLBACK
+  );
+  
+  /* field */
+  $items['cmsfield/field'] = array(
+    'title' => 'field structure',
+    'page callback' => 'cmsfield_field_structure',
+    'file' => 'inc/cmsfield.field.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field field view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/field/%/list'] = array(
+    'title' => 'Field list',
+    'page callback' => 'cmsfield_field',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsfield.field.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field field view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/field/%/add'] = array(
+    'title' => 'Field add',
+    'page callback' => 'cmsfield_field',
+    'page arguments' => array(3, 2),
+    'file' => 'inc/cmsfield.field.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field field add'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/field/%/%/edit'] = array(
+    'title' => 'Field edit',
+    'page callback' => 'cmsfield_field',
+    'page arguments' => array(4, 2, 3),
+    'file' => 'inc/cmsfield.field.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field field edit'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/field/%/%/delete'] = array(
+    'title' => 'Field edit',
+    'page callback' => 'cmsfield_field',
+    'page arguments' => array(4, 2, 3),
+    'file' => 'inc/cmsfield.field.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field field delete'),
+    'type' => MENU_CALLBACK
+  );
+
+  /* user field */
+  $items['cmsfield/userfield'] = array(
+    'title' => 'field user structure',
+    'page callback' => 'cmsfield_userfield_structure',
+    'file' => 'inc/cmsfield.userfield.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field user field view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/userfield/%/list'] = array(
+    'title' => 'Field list',
+    'page callback' => 'cmsfield_userfield_list',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsfield.userfield.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field user field view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/userfield/%/%/edit'] = array(
+    'title' => 'Field edit',
+    'page callback' => 'cmsfield_userfield_edit',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsfield.userfield.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field user field edit'),
+    'type' => MENU_CALLBACK
+  );
+
+  /* content field */
+  $items['cmsfield/contentfield'] = array(
+    'title' => 'field content structure',
+    'page callback' => 'cmsfield_contentfield_structure',
+    'file' => 'inc/cmsfield.contentfield.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field content field view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/contentfield/%/list'] = array(
+    'title' => 'Field list',
+    'page callback' => 'cmsfield_contentfield_list',
+    'page arguments' => array(2),
+    'file' => 'inc/cmsfield.contentfield.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field content field view'),
+    'type' => MENU_CALLBACK
+  );
+  $items['cmsfield/contentfield/%/%/edit'] = array(
+    'title' => 'Field edit',
+    'page callback' => 'cmsfield_contentfield_edit',
+    'page arguments' => array(2, 3),
+    'file' => 'inc/cmsfield.contentfield.inc',
+    'delivery callback' => 'cmsframe',
+    'access arguments' => array('cms field content field edit'),
+    'type' => MENU_CALLBACK
+  );
+  return $items;
+}
+
+function cmsfield_permission(){
+  $perms = array(
+    'cms field' => array('title' => t('CMS字段 管理')),
+    /* category */
+    'cms field category view' => array('title' => t('CMS字段 类别查看')),
+    'cms field category add' => array('title' => t('CMS字段 类别添加')),
+    'cms field category edit' => array('title' => t('CMS字段 类别编辑')),
+    'cms field category delete' => array('title' => t('CMS字段 类别删除')),
+    /* field */
+    'cms field field view' => array('title' => t('CMS字段 字段查看')),
+    'cms field field add' => array('title' => t('CMS字段 字段添加')),
+    'cms field field edit' => array('title' => t('CMS字段 字段编辑')),
+    'cms field field delete' => array('title' => t('CMS字段 字段删除')),
+
+    'cms field user field view' => array('title' => t('CMS字段 用户字段查看')),
+    'cms field user field edit' => array('title' => t('CMS字段 用户字段编辑')),
+
+    'cms field content field view' => array('title' => t('CMS字段 内容字段查看')),
+    'cms field content field edit' => array('title' => t('CMS字段 内容字段编辑'))
+  );
+  return $perms;
+}
